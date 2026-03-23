@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HEC Data Analyst · Heartland Educational Consortium</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+  :root {
+    --hec-navy: #293a99;
+    --hec-gold: #91c94d;
+    --hec-gold-light: #e8f5d4;
+    --hec-cream: #f5f8f0;
+    --hec-dark: #111827;
+    --hec-mid: #4B5563;
+    --hec-light: #9CA3AF;
+    --hec-border: #dde8cc;
+    --hec-success: #2D6A4F;
+    --hec-warn: #92400E;
+    --hec-danger: #7F1D1D;
+    --grade-a: #2D6A4F;
+    --grade-b: #293a99;
+    --grade-c: #92400E;
+    --grade-d: #7F1D1D;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--hec-cream);
+    color: var(--hec-dark);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Header */
+  .header {
+    background: var(--hec-navy);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    border-bottom: 3px solid var(--hec-gold);
+    flex-shrink: 0;
+  }
+
+  .header-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .header-logo {
+    width: 36px;
+    height: 36px;
+    background: var(--hec-gold);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    color: var(--hec-navy);
+    font-weight: 400;
+  }
+
+  .header-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    color: #fff;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+  }
+
+  .header-subtitle {
+    font-size: 11px;
+    color: var(--hec-gold);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .header-badge {
+    background: rgba(145,201,77,0.2);
+    border: 1px solid rgba(145,201,77,0.4);
+    color: var(--hec-gold);
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.05em;
+  }
+
+  /* Layout */
+  .main {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    height: calc(100vh - 60px);
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width: 280px;
+    background: #fff;
+    border-right: 1px solid var(--hec-border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .sidebar-section {
+    padding: 16px;
+    border-bottom: 1px solid var(--hec-border);
+  }
+
+  .sidebar-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--hec-light);
+    margin-bottom: 10px;
+  }
+
+  .district-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: var(--hec-mid);
+    font-weight: 400;
+    transition: all 0.15s;
+    text-align: left;
+    margin-bottom: 2px;
+  }
+
+  .district-btn:hover {
+    background: var(--hec-cream);
+    color: var(--hec-navy);
+  }
+
+  .district-btn.active {
+    background: var(--hec-gold-light);
+    color: var(--hec-navy);
+    font-weight: 500;
+  }
+
+  .grade-pill {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 4px;
+    min-width: 22px;
+    text-align: center;
+  }
+
+  .grade-A { background: #D1FAE5; color: var(--grade-a); }
+  .grade-B { background: #dde6ff; color: #293a99; }
+  .grade-C { background: #FEF3C7; color: var(--grade-c); }
+  .grade-D { background: #FEE2E2; color: var(--grade-d); }
+  .grade-N { background: #F3F4F6; color: #6B7280; }
+
+  .prompt-chips {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .chip {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--hec-border);
+    background: var(--hec-cream);
+    font-size: 12px;
+    color: var(--hec-mid);
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: left;
+    font-family: 'DM Sans', sans-serif;
+    line-height: 1.4;
+  }
+
+  .chip:hover {
+    border-color: var(--hec-gold);
+    color: var(--hec-navy);
+    background: var(--hec-gold-light);
+  }
+
+  .chip-icon {
+    font-size: 13px;
+    margin-right: 6px;
+  }
+
+  .sidebar-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+  }
+
+  /* Chat area */
+  .chat-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .welcome-card {
+    background: var(--hec-navy);
+    border-radius: 16px;
+    padding: 28px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .welcome-card::before {
+    content: '';
+    position: absolute;
+    top: -30px;
+    right: -30px;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: rgba(145,201,77,0.15);
+  }
+
+  .welcome-card::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    right: 60px;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: rgba(145,201,77,0.08);
+  }
+
+  .welcome-tag {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--hec-gold);
+    margin-bottom: 8px;
+  }
+
+  .welcome-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: #fff;
+    font-weight: 400;
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .welcome-body {
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.6;
+  }
+
+  .msg-row {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .msg-row.user {
+    flex-direction: row-reverse;
+  }
+
+  .msg-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .avatar-ai {
+    background: var(--hec-navy);
+    color: var(--hec-gold);
+    border: 2px solid var(--hec-gold);
+    font-family: 'DM Serif Display', serif;
+    font-size: 15px;
+  }
+
+  .avatar-user {
+    background: var(--hec-gold-light);
+    color: #2a5e0a;
+  }
+
+  .msg-bubble {
+    max-width: 75%;
+    padding: 14px 16px;
+    border-radius: 14px;
+    line-height: 1.6;
+    font-size: 14px;
+  }
+
+  .bubble-ai {
+    background: #fff;
+    border: 1px solid var(--hec-border);
+    border-top-left-radius: 4px;
+    color: var(--hec-dark);
+  }
+
+  .bubble-user {
+    background: var(--hec-navy);
+    color: #fff;
+    border-top-right-radius: 4px;
+  }
+
+  .msg-bubble p { margin-bottom: 8px; }
+  .msg-bubble p:last-child { margin-bottom: 0; }
+
+  /* Data tables in messages */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    margin: 10px 0;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--hec-border);
+  }
+
+  .data-table th {
+    background: var(--hec-cream);
+    padding: 8px 10px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--hec-mid);
+    border-bottom: 1px solid var(--hec-border);
+  }
+
+  .data-table td {
+    padding: 7px 10px;
+    border-bottom: 1px solid #F3F0EA;
+    color: var(--hec-dark);
+  }
+
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: var(--hec-cream); }
+
+  .highlight-row td { background: #FFFBF0; }
+
+  /* Stat cards in messages */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin: 10px 0;
+  }
+
+  .stat-card {
+    background: var(--hec-cream);
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+  }
+
+  .stat-val {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--hec-navy);
+    display: block;
+  }
+
+  .stat-lbl {
+    font-size: 10px;
+    color: var(--hec-light);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  /* Progress bars */
+  .metric-row {
+    margin: 6px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .metric-label {
+    font-size: 12px;
+    color: var(--hec-mid);
+    min-width: 100px;
+  }
+
+  .metric-bar {
+    flex: 1;
+    height: 6px;
+    background: var(--hec-border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .metric-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: var(--hec-navy);
+    transition: width 0.6s ease;
+  }
+
+  .metric-val {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--hec-navy);
+    min-width: 30px;
+    text-align: right;
+  }
+
+  .loading-dots {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    padding: 4px 0;
+  }
+
+  .loading-dots span {
+    width: 6px;
+    height: 6px;
+    background: var(--hec-light);
+    border-radius: 50%;
+    animation: bounce 1.2s infinite;
+  }
+
+  .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes bounce {
+    0%, 80%, 100% { transform: scale(1); opacity: 0.4; }
+    40% { transform: scale(1.2); opacity: 1; }
+  }
+
+  /* Input area */
+  .input-area {
+    padding: 16px 24px;
+    background: #fff;
+    border-top: 1px solid var(--hec-border);
+    flex-shrink: 0;
+  }
+
+  .input-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    background: var(--hec-cream);
+    border: 1.5px solid var(--hec-border);
+    border-radius: 12px;
+    padding: 8px 12px;
+    transition: border-color 0.2s;
+  }
+
+  .input-row:focus-within {
+    border-color: var(--hec-gold);
+  }
+
+  .input-box {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--hec-dark);
+    outline: none;
+    resize: none;
+    line-height: 1.5;
+  }
+
+  .input-box::placeholder { color: var(--hec-light); }
+
+  .send-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: var(--hec-navy);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+
+  .send-btn:hover { background: #243a63; }
+  .send-btn:active { transform: scale(0.95); }
+
+  .send-btn svg { width: 16px; height: 16px; fill: var(--hec-gold); }
+
+  .input-hint {
+    font-size: 11px;
+    color: var(--hec-light);
+    text-align: center;
+    margin-top: 6px;
+    letter-spacing: 0.02em;
+  }
+
+  .trend-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 11px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+
+  .trend-up { background: #D1FAE5; color: #065F46; }
+  .trend-down { background: #FEE2E2; color: #7F1D1D; }
+  .trend-flat { background: #F3F4F6; color: #4B5563; }
+
+  .section-head {
+    font-family: 'DM Serif Display', serif;
+    font-size: 16px;
+    color: var(--hec-navy);
+    margin: 12px 0 8px;
+    font-weight: 400;
+  }
+
+  .callout {
+    border-left: 3px solid var(--hec-gold);
+    padding: 8px 12px;
+    background: var(--hec-gold-light);
+    border-radius: 0 8px 8px 0;
+    margin: 8px 0;
+    font-size: 13px;
+    color: var(--hec-navy);
+  }
+
+  .error-msg {
+    color: #B91C1C;
+    font-size: 13px;
+    padding: 10px;
+    background: #FEF2F2;
+    border-radius: 8px;
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-brand">
+    <div class="header-logo">H</div>
+    <div>
+      <div class="header-title">HEC Data Analyst</div>
+      <div class="header-subtitle">Heartland Educational Consortium</div>
+    </div>
+  </div>
+  <div class="header-badge">✦ AI-Powered · 2025 Data</div>
+</header>
+
+<div class="main">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Districts</div>
+      <button class="district-btn active" onclick="setDistrict('ALL')">
+        <span>All Districts</span>
+        <span class="grade-pill grade-N">6</span>
+      </button>
+      <button class="district-btn" onclick="setDistrict('DESOTO')">
+        <span>DeSoto</span>
+        <span class="grade-pill grade-C">C</span>
+      </button>
+      <button class="district-btn" onclick="setDistrict('GLADES')">
+        <span>Glades</span>
+        <span class="grade-pill grade-A">A</span>
+      </button>
+      <button class="district-btn" onclick="setDistrict('HARDEE')">
+        <span>Hardee</span>
+        <span class="grade-pill grade-B">B</span>
+      </button>
+      <button class="district-btn" onclick="setDistrict('HENDRY')">
+        <span>Hendry</span>
+        <span class="grade-pill grade-B">B</span>
+      </button>
+      <button class="district-btn" onclick="setDistrict('HIGHLANDS')">
+        <span>Highlands</span>
+        <span class="grade-pill grade-B">B</span>
+      </button>
+      <button class="district-btn" onclick="setDistrict('OKEECHOBEE')">
+        <span>Okeechobee</span>
+        <span class="grade-pill grade-C">C</span>
+      </button>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Quick Questions</div>
+      <div class="prompt-chips" id="chipContainer"></div>
+    </div>
+
+    <div class="sidebar-scroll">
+      <div class="sidebar-label">Data Available</div>
+      <div style="font-size:12px; color:var(--hec-mid); line-height:1.7;">
+        <div>📊 School &amp; District Grades</div>
+        <div>📈 ELA &amp; Math Achievement</div>
+        <div>🔬 Science Scores</div>
+        <div>📉 Learning Gains Data</div>
+        <div>🎓 Graduation Rates</div>
+        <div>👥 Lowest 25% Progress</div>
+        <div>📅 Trend: 2016–2025</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Chat -->
+  <div class="chat-area">
+    <div class="chat-messages" id="chatMessages">
+
+      <div class="welcome-card">
+        <div class="welcome-tag">✦ Intelligent Data Assistant</div>
+        <div class="welcome-title">Ask me anything about your schools</div>
+        <div class="welcome-body">I have full access to performance data across all 6 HEC districts — grades, ELA, Math, Science, graduation rates, and multi-year trends. Try a question below or type your own.</div>
+      </div>
+
+    </div>
+
+    <div class="input-area">
+      <div class="input-row">
+        <textarea
+          class="input-box"
+          id="userInput"
+          placeholder="Ask about any school, district, subject, or trend…"
+          rows="1"
+          onkeydown="handleKey(event)"
+          oninput="autoResize(this)"
+        ></textarea>
+        <button class="send-btn" onclick="sendMessage()" id="sendBtn">
+          <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg>
+        </button>
+      </div>
+      <div class="input-hint">Powered by Claude · Data from Heartland Educational Consortium 2025</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const DISTRICTS = ['DESOTO','GLADES','HARDEE','HENDRY','HIGHLANDS','OKEECHOBEE'];
+let activeDistrict = 'ALL';
+
+const DISTRICT_DATA = [{"district":"DESOTO","districtNum":14,"grade2025":"C","grade2024":"C","grade2022":"C","grade2019":"C","grade2018":"C","totalPoints":658,"pctPoints":55,"ela":42,"elaGains":55,"math":50,"mathGains":54,"science":42,"gradRate":77,"lowestELA":59,"lowestMath":54},{"district":"GLADES","districtNum":22,"grade2025":"A","grade2024":"B","grade2022":"C","grade2019":"C","grade2018":"C","totalPoints":763,"pctPoints":64,"ela":59,"elaGains":57,"math":66,"mathGains":57,"science":54,"gradRate":90,"lowestELA":55,"lowestMath":52},{"district":"HARDEE","districtNum":25,"grade2025":"B","grade2024":"C","grade2022":"C","grade2019":"B","grade2018":"C","totalPoints":702,"pctPoints":59,"ela":52,"elaGains":54,"math":50,"mathGains":54,"science":53,"gradRate":74,"lowestELA":51,"lowestMath":50},{"district":"HENDRY","districtNum":26,"grade2025":"B","grade2024":"C","grade2022":"C","grade2019":"C","grade2018":"C","totalPoints":718,"pctPoints":60,"ela":49,"elaGains":55,"math":55,"mathGains":59,"science":53,"gradRate":85,"lowestELA":55,"lowestMath":56},{"district":"HIGHLANDS","districtNum":28,"grade2025":"B","grade2024":"C","grade2022":"C","grade2019":"C","grade2018":"C","totalPoints":692,"pctPoints":58,"ela":53,"elaGains":58,"math":56,"mathGains":54,"science":54,"gradRate":84,"lowestELA":56,"lowestMath":52},{"district":"OKEECHOBEE","districtNum":47,"grade2025":"C","grade2024":"C","grade2022":"C","grade2019":"B","grade2018":"C","totalPoints":633,"pctPoints":53,"ela":45,"elaGains":50,"math":47,"mathGains":47,"science":45,"gradRate":80,"lowestELA":51,"lowestMath":43}];
+
+const SCHOOL_DATA = [{"district":"DESOTO","school":"DESOTO COUNTY HIGH SCHOOL","grade2025":"B","grade2024":"C","grade2023":"C","grade2022":"C","pctPoints":57,"elaAch":41,"mathAch":39,"sciAch":65,"gradRate":82,"econDis":82,"elaGains":54,"mathGains":50,"elaLow25":57,"mathLow25":60},{"district":"DESOTO","school":"WEST ELEMENTARY SCHOOL","grade2025":"C","grade2024":"C","grade2023":"D","grade2022":"D","pctPoints":52,"elaAch":46,"mathAch":58,"sciAch":42,"gradRate":null,"econDis":100,"elaGains":55,"mathGains":60,"elaLow25":53,"mathLow25":50},{"district":"DESOTO","school":"MEMORIAL ELEMENTARY SCHOOL-DESOTO","grade2025":"C","grade2024":"C","grade2023":"C","grade2022":"C","pctPoints":47,"elaAch":39,"mathAch":51,"sciAch":41,"gradRate":null,"econDis":100,"elaGains":47,"mathGains":54,"elaLow25":57,"mathLow25":42},{"district":"DESOTO","school":"DESOTO MIDDLE SCHOOL","grade2025":"C","grade2024":"C","grade2023":"C","grade2022":"D","pctPoints":54,"elaAch":43,"mathAch":51,"sciAch":26,"gradRate":null,"econDis":91,"elaGains":58,"mathGains":53,"elaLow25":64,"mathLow25":62},{"district":"DESOTO","school":"NOCATEE ELEMENTARY SCHOOL","grade2025":"C","grade2024":"B","grade2023":"C","grade2022":"D","pctPoints":50,"elaAch":40,"mathAch":55,"sciAch":44,"gradRate":null,"econDis":100,"elaGains":57,"mathGains":60,"elaLow25":66,"mathLow25":42},{"district":"GLADES","school":"MOORE HAVEN MIDDLE HIGH SCHOOL.","grade2025":"C","grade2024":"C","grade2023":"C","grade2022":"D","pctPoints":49,"elaAch":48,"mathAch":45,"sciAch":36,"gradRate":90,"econDis":100,"elaGains":54,"mathGains":47,"elaLow25":54,"mathLow25":49},{"district":"GLADES","school":"MOORE HAVEN ELEMENTARY SCHOOL","grade2025":"B","grade2024":"C","grade2023":"C","grade2022":"D","pctPoints":59,"elaAch":58,"mathAch":53,"sciAch":64,"gradRate":null,"econDis":100,"elaGains":68,"mathGains":44,"elaLow25":87,"mathLow25":38},{"district":"GLADES","school":"WEST GLADES SCHOOL","grade2025":"A","grade2024":"A","grade2023":"B","grade2022":"B","pctPoints":67,"elaAch":62,"mathAch":76,"sciAch":59,"gradRate":null,"econDis":72.9,"elaGains":60,"mathGains":69,"elaLow25":57,"mathLow25":63},{"district":"GLADES","school":"PEMAYETV EMAHAKV CHARTER \"OUR WAY SCHOOL\"","grade2025":"A","grade2024":"A","grade2023":"A","grade2022":"A","pctPoints":70,"elaAch":72,"mathAch":87,"sciAch":67,"gradRate":null,"econDis":0.3,"elaGains":50,"mathGains":59,"elaLow25":51,"mathLow25":61},{"district":"HARDEE","school":"HILLTOP ELEMENTARY SCHOOL","grade2025":"B","grade2024":"B","grade2023":"C","grade2022":"C","pctPoints":55,"elaAch":47,"mathAch":48,"sciAch":37,"gradRate":null,"econDis":100,"elaGains":69,"mathGains":68,"elaLow25":73,"mathLow25":68},{"district":"HARDEE","school":"HARDEE SENIOR HIGH SCHOOL","grade2025":"C","grade2024":"C","grade2023":"C","grade2022":"C","pctPoints":54,"elaAch":51,"mathAch":38,"sciAch":68,"gradRate":73,"econDis":100,"elaGains":50,"mathGains":42,"elaLow25":48,"mathLow25":35},{"district":"HARDEE","school":"HARDEE JUNIOR HIGH SCHOOL","grade2025":"B","grade2024":"C","grade2023":"C","grade2022":"C","pctPoints":57,"elaAch":50,"mathAch":51,"sciAch":49,"gradRate":null,"econDis":100,"elaGains":55,"mathGains":56,"elaLow25":54,"mathLow25":54},{"district":"HARDEE","school":"BOWLING GREEN ELEMENTARY SCHOOL","grade2025":"B","grade2024":"C","grade2023":"C","grade2022":"A","pctPoints":55,"elaAch":48,"mathAch":58,"sciAch":49,"gradRate":null,"econDis":100,"elaGains":50,"mathGains":73,"elaLow25":50,"mathLow25":58},{"district":"HARDEE","school":"ZOLFO SPRINGS ELEMENTARY SCHOOL","grade2025":"B","grade2024":"C","grade2023":"C","grade2022":"C","pctPoints":54,"elaAch":58,"mathAch":54,"sciAch":48,"gradRate":null,"econDis":100,"elaGains":59,"mathGains":54,"elaLow25":49,"mathLow25":51},{"district":"HARDEE","school":"WAUCHULA ELEMENTARY SCHOOL","grade2025":"A","grade2024":"C","grade2023":"B","grade2022":"C","pctPoints":63,"elaAch":67,"mathAch":69,"sciAch":48,"gradRate":null,"econDis":100,"elaGains":59,"mathGains":63,"elaLow25":59,"mathLow25":59},{"district":"HARDEE","school":"NORTH WAUCHULA ELEMENTARY SCHOOL","grade2025":"C","grade2024":"C","grade2023":"C","grade2022":"B","pctPoints":44,"elaAch":45,"mathAch":48,"sciAch":36,"gradRate":null,"econDis":100,"elaGains":43,"mathGains":46,"elaLow25":37,"mathLow25":46},{"district":"HARDEE","school":"HARDEE VIRTUAL FRANCHISE","grade2025":"C","grade2024":"B","grade2023":"N/A","grade2022":"N/A","pctPoints":50,"elaAch":56,"mathAch":29,"sciAch":45,"gradRate":83,"econDis":46.2,"elaGains":43,"mathGains":32,"elaLow25":null,"mathLow25":null},{"district":"HENDRY","school":"HENDRY SUCCESS ACADEMY","grade2025":"B","grade2024":"N/A","grade2023":"N/A","grade2022":"N/A","pctPoints":57,"elaAch":47,"mathAch":49,"sciAch":54,"gradRate":null,"econDis":76.5,"elaGains":57,"mathGains":59,"elaLow25":60,"mathLow25":61},{"district":"HENDRY","school":"LABELLE MIDDLE SCHOOL","grade2025":"B","grade2024":"C","grade2023":"C","grade2022":"C","pctPoints":57,"elaAch":47,"mathAch":49,"sciAch":54,"gradRate":null,"econDis":100,"elaGains":57,"mathGains":59,"elaLow25":60,"mathLow25":61},{"district":"HENDRY","school":"CLEWISTON MIDDLE SCHOOL","grade2025":"C","grade2024":"C","grade2023":"C","grade2022":"C","pctPoints":52,"elaAch":42,"mathAch":55,"sciAch":38,"gradRate":null,"econDis":100,"elaGains":44,"mathGains":53,"elaLow25":40,"mathLow25":49},{"district":"HENDRY","school":"LABELLE ELEMENTARY SCHOOL","grade2025":"B","grade2024":"D","grade2023":"C","grade2022":"C","pctPoints":56,"elaAch":50,"mathAch":60,"sciAch":42,"gradRate":null,"econDis":100,"elaGains":61,"mathGains":63,"elaLow25":59,"mathLow25":67},{"district":"HENDRY","school":"WESTSIDE ELEMENTARY SCHOOL","grade2025":"A","grade2024":"B","grade2023":"B","grade2022":"B","pctPoints":65,"elaAch":62,"mathAch":80,"sciAch":55,"gradRate":null,"econDis":100,"elaGains":60,"mathGains":71,"elaLow25":70,"mathLow25":53},{"district":"HENDRY","school":"EASTSIDE ELEMENTARY SCHOOL","grade2025":"A","grade2024":"A","grade2023":"B","grade2022":"C","pctPoints":71,"elaAch":63,"mathAch":75,"sciAch":56,"gradRate":null,"econDis":100,"elaGains":79,"mathGains":85,"elaLow25":75,"mathLow25":77},{"district":"HENDRY","school":"CENTRAL ELEMENTARY SCHOOL-HENDRY","grade2025":"A","grade2024":"B","grade2023":"C","grade2022":"A","pctPoints":63,"elaAch":55,"mathAch":71,"sciAch":71,"gradRate":null,"econDis":100,"elaGains":50,"mathGains":77,"elaLow25":49,"mathLow25":68},{"district":"HENDRY","school":"LABELLE HIGH SCHOOL","grade2025":"B","grade2024":"C","grade2023":"C","grade2022":"C","pctPoints":61,"elaAch":54,"mathAch":43,"sciAch":61,"gradRate":87,"econDis":92.3,"elaGains":57,"mathGains":49,"elaLow25":54,"mathLow25":56},{"district":"HENDRY","school":"COUNTRY OAKS ELEMENTARY SCHOOL","grade2025":"C","grade2024":"C","grade2023":"C","grade2022":"C","pctPoints":51,"elaAch":46,"mathAch":55,"sciAch":44,"gradRate":null,"econDis":100,"elaGains":59,"mathGains":60,"elaLow25":55,"mathLow25":41},{"district":"HENDRY","school":"EDWARD A. UPTHEGROVE ELEMENTARY","grade2025":"C","grade2024":"C","grade2023":"C","grade2022":"C","pctPoints":51,"elaAch":47,"mathAch":51,"sciAch":32,"gradRate":null,"econDis":100,"elaGains":63,"mathGains":58,"elaLow25":71,"mathLow25":44},{"district":"HENDRY","school":"CLEWISTON HIGH SCHOOL","grade2025":"B","grade2024":"C","grade2023":"C","grade2022":"C","pctPoints":57,"elaAch":41,"mathAch":43,"sciAch":66,"gradRate":87,"econDis":100,"elaGains":50,"mathGains":54,"elaLow25":48,"mathLow25":65},{"district":"HENDRY","school":"K12 FLORIDA, LLC – GRADES KG-12","grade2025":"D","grade2024":"D","grade2023":"D","grade2022":"N/A","pctPoints":43,"elaAch":42,"mathAch":24,"sciAch":36,"gradRate":74,"econDis":null,"elaGains":48,"mathGains":36,"elaLow25":46,"mathLow25":39},{"district":"HIGHLANDS","school":"MEMORIAL ELEMENTARY SCHOOL-HIGHLANDS","grade2025":"B","grade2024":"C","grade2023":"C","grade2022":"C","pctPoints":54,"elaAch":52,"mathAch":56,"sciAch":54,"gradRate":null,"econDis":100,"elaGains":60,"mathGains":56,"elaLow25":67,"mathLow25":35},{"district":"HIGHLANDS","school":"SEBRING MIDDLE SCHOOL","grade2025":"C","grade2024":"C","grade2023":"C","grade2022":"C","pctPoints":55,"elaAch":52,"mathAch":61,"sciAch":42,"gradRate":null,"econDis":100,"elaGains":58,"mathGains":61,"elaLow25":52,"mathLow25":57},{"district":"HIGHLANDS","school":"LAKE COUNTRY ELEMENTARY SCHOOL","grade2025":"A","grade2024":"B","grade2023":"B","grade2022":"B","pctPoints":62,"elaAch":60,"mathAch":66,"sciAch":46,"gradRate":null,"econDis":100,"elaGains":69,"mathGains":66,"elaLow25":68,"mathLow25":57},{"district":"HIGHLANDS","school":"LAKE PLACID MIDDLE SCHOOL","grade2025":"C","grade2024":"C","grade2023":"C","grade2022":"C","pctPoints":53,"elaAch":52,"mathAch":49,"sciAch":34,"gradRate":null,"econDis":100,"elaGains":58,"mathGains":49,"elaLow25":59,"mathLow25":51},{"district":"HIGHLANDS","school":"WOODLAWN ELEMENTARY SCHOOL","grade2025":"B","grade2024":"B","grade2023":"B","grade2022":"C","pctPoints":57,"elaAch":55,"mathAch":66,"sciAch":63,"gradRate":null,"econDis":100,"elaGains":59,"mathGains":62,"elaLow25":51,"mathLow25":47},{"district":"HIGHLANDS","school":"PARK ELEMENTARY SCHOOL","grade2025":"A","grade2024":"B","grade2023":"C","grade2022":"D","pctPoints":72,"elaAch":69,"mathAch":80,"sciAch":68,"gradRate":null,"econDis":100,"elaGains":69,"mathGains":84,"elaLow25":69,"mathLow25":71},{"district":"HIGHLANDS","school":"CRACKER TRAIL ELEMENTARY SCHOOL","grade2025":"A","grade2024":"B","grade2023":"B","grade2022":"B","pctPoints":63,"elaAch":62,"mathAch":67,"sciAch":64,"gradRate":null,"econDis":100,"elaGains":64,"mathGains":64,"elaLow25":69,"mathLow25":51},{"district":"HIGHLANDS","school":"FRED WILD ELEMENTARY SCHOOL","grade2025":"C","grade2024":"B","grade2023":"C","grade2022":"D","pctPoints":50,"elaAch":48,"mathAch":60,"sciAch":47,"gradRate":null,"econDis":100,"elaGains":50,"mathGains":56,"elaLow25":36,"mathLow25":53},{"district":"HIGHLANDS","school":"HILL-GUSTAT MIDDLE SCHOOL","grade2025":"B","grade2024":"B","grade2023":"C","grade2022":"C","pctPoints":58,"elaAch":54,"mathAch":47,"sciAch":59,"gradRate":null,"econDis":100,"elaGains":61,"mathGains":44,"elaLow25":64,"mathLow25":55},{"district":"HIGHLANDS","school":"AVON ELEMENTARY SCHOOL","grade2025":"B","grade2024":"C","grade2023":"C","grade2022":"C","pctPoints":56,"elaAch":51,"mathAch":67,"sciAch":53,"gradRate":null,"econDis":100,"elaGains":55,"mathGains":63,"elaLow25":58,"mathLow25":51},{"district":"HIGHLANDS","school":"AVON PARK MIDDLE SCHOOL","grade2025":"C","grade2024":"C","grade2023":"C","grade2022":"C","pctPoints":53,"elaAch":47,"mathAch":44,"sciAch":43,"gradRate":null,"econDis":100,"elaGains":55,"mathGains":49,"elaLow25":55,"mathLow25":57},{"district":"HIGHLANDS","school":"LAKE PLACID ELEMENTARY SCHOOL","grade2025":"A","grade2024":"A","grade2023":"C","grade2022":"D","pctPoints":70,"elaAch":65,"mathAch":81,"sciAch":57,"gradRate":null,"econDis":100,"elaGains":65,"mathGains":82,"elaLow25":63,"mathLow25":74},{"district":"HIGHLANDS","school":"SEBRING HIGH SCHOOL","grade2025":"C","grade2024":"C","grade2023":"C","grade2022":"C","pctPoints":54,"elaAch":51,"mathAch":43,"sciAch":64,"gradRate":87,"econDis":100,"elaGains":54,"mathGains":40,"elaLow25":45,"mathLow25":42},{"district":"HIGHLANDS","school":"AVON PARK HIGH SCHOOL","grade2025":"C","grade2024":"C","grade2023":"C","grade2022":"C","pctPoints":55,"elaAch":50,"mathAch":48,"sciAch":63,"gradRate":84,"econDis":100,"elaGains":54,"mathGains":51,"elaLow25":61,"mathLow25":45},{"district":"HIGHLANDS","school":"LAKE PLACID HIGH SCHOOL","grade2025":"C","grade2024":"C","grade2023":"C","grade2022":"C","pctPoints":55,"elaAch":52,"mathAch":43,"sciAch":56,"gradRate":87,"econDis":100,"elaGains":58,"mathGains":45,"elaLow25":53,"mathLow25":50},{"district":"HIGHLANDS","school":"SUN 'N LAKE ELEMENTARY SCHOOL","grade2025":"A","grade2024":"B","grade2023":"B","grade2022":"C","pctPoints":63,"elaAch":63,"mathAch":72,"sciAch":61,"gradRate":null,"econDis":100,"elaGains":63,"mathGains":67,"elaLow25":61,"mathLow25":48},{"district":"HIGHLANDS","school":"HIGHLANDS VIRTUAL SCHOOL","grade2025":"C","grade2024":"C","grade2023":"C","grade2022":"C","pctPoints":47,"elaAch":64,"mathAch":32,"sciAch":49,"gradRate":62,"econDis":82.5,"elaGains":56,"mathGains":22,"elaLow25":60,"mathLow25":null},{"district":"OKEECHOBEE","school":"CENTRAL ELEMENTARY SCHOOL-OKEE","grade2025":"C","grade2024":"C","grade2023":"C","grade2022":"C","pctPoints":44,"elaAch":42,"mathAch":40,"sciAch":40,"gradRate":null,"econDis":100,"elaGains":45,"mathGains":48,"elaLow25":46,"mathLow25":46},{"district":"OKEECHOBEE","school":"OKEECHOBEE HIGH SCHOOL","grade2025":"C","grade2024":"C","grade2023":"C","grade2022":"C","pctPoints":56,"elaAch":47,"mathAch":42,"sciAch":59,"gradRate":86,"econDis":100,"elaGains":50,"mathGains":42,"elaLow25":57,"mathLow25":48},{"district":"OKEECHOBEE","school":"SOUTH ELEMENTARY SCHOOL","grade2025":"C","grade2024":"B","grade2023":"B","grade2022":"C","pctPoints":51,"elaAch":50,"mathAch":59,"sciAch":41,"gradRate":null,"econDis":100,"elaGains":49,"mathGains":65,"elaLow25":44,"mathLow25":45},{"district":"OKEECHOBEE","school":"YEARLING MIDDLE SCHOOL","grade2025":"C","grade2024":"C","grade2023":"D","grade2022":"C","pctPoints":48,"elaAch":48,"mathAch":47,"sciAch":46,"gradRate":null,"econDis":100,"elaGains":54,"mathGains":46,"elaLow25":44,"mathLow25":46},{"district":"OKEECHOBEE","school":"NORTH ELEMENTARY SCHOOL","grade2025":"C","grade2024":"C","grade2023":"B","grade2022":"C","pctPoints":44,"elaAch":43,"mathAch":45,"sciAch":44,"gradRate":null,"econDis":100,"elaGains":48,"mathGains":40,"elaLow25":57,"mathLow25":37},{"district":"OKEECHOBEE","school":"EVERGLADES ELEMENTARY SCHOOL","grade2025":"C","grade2024":"C","grade2023":"C","grade2022":"B","pctPoints":47,"elaAch":41,"mathAch":54,"sciAch":35,"gradRate":null,"econDis":100,"elaGains":46,"mathGains":51,"elaLow25":56,"mathLow25":47},{"district":"OKEECHOBEE","school":"SEMINOLE ELEMENTARY SCHOOL","grade2025":"C","grade2024":"C","grade2023":"C","grade2022":"C","pctPoints":44,"elaAch":49,"mathAch":49,"sciAch":39,"gradRate":null,"econDis":100,"elaGains":43,"mathGains":43,"elaLow25":44,"mathLow25":33},{"district":"OKEECHOBEE","school":"OSCEOLA MIDDLE SCHOOL","grade2025":"C","grade2024":"C","grade2023":"C","grade2022":"C","pctPoints":49,"elaAch":44,"mathAch":49,"sciAch":36,"gradRate":null,"econDis":100,"elaGains":52,"mathGains":49,"elaLow25":52,"mathLow25":35},{"district":"OKEECHOBEE","school":"OKEECHOBEE VIRTUAL FRANCHISE","grade2025":"A","grade2024":"B","grade2023":"N/A","grade2022":"N/A","pctPoints":66,"elaAch":74,"mathAch":53,"sciAch":null,"gradRate":79,"econDis":98.4,"elaGains":76,"mathGains":50,"elaLow25":null,"mathLow25":null}];
+
+const CHIPS = [
+  { icon: '🏆', text: 'Which district improved the most?' },
+  { icon: '📚', text: 'Show all A-rated schools' },
+  { icon: '📉', text: 'Which schools are struggling in math?' },
+  { icon: '🎓', text: 'Compare graduation rates' },
+  { icon: '📊', text: 'ELA vs Math achievement comparison' },
+  { icon: '⬆️', text: 'Which schools jumped a grade level?' },
+];
+
+function buildChips() {
+  const container = document.getElementById('chipContainer');
+  CHIPS.forEach(c => {
+    const btn = document.createElement('button');
+    btn.className = 'chip';
+    btn.innerHTML = `<span class="chip-icon">${c.icon}</span>${c.text}`;
+    btn.onclick = () => { document.getElementById('userInput').value = c.text; sendMessage(); };
+    container.appendChild(btn);
+  });
+}
+
+function setDistrict(d) {
+  activeDistrict = d;
+  document.querySelectorAll('.district-btn').forEach(b => b.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  const ctx = d === 'ALL' ? 'all 6 HEC districts' : `the ${d} district`;
+  document.getElementById('userInput').placeholder = `Ask about ${ctx}…`;
+}
+
+function gradeClass(g) {
+  if (!g || g === 'N/A') return 'grade-N';
+  return 'grade-' + g.charAt(0);
+}
+
+function trendBadge(g25, g24) {
+  const order = {'A':5,'B':4,'C':3,'D':2,'F':1};
+  const v25 = order[g25] || 0, v24 = order[g24] || 0;
+  if (v25 > v24) return `<span class="trend-badge trend-up">▲ up from ${g24||'–'}</span>`;
+  if (v25 < v24) return `<span class="trend-badge trend-down">▼ down from ${g24||'–'}</span>`;
+  return `<span class="trend-badge trend-flat">→ same as ${g24||'–'}</span>`;
+}
+
+function bar(val, max=100) {
+  const pct = Math.min(100, val || 0);
+  const color = pct >= 60 ? '#91c94d' : pct >= 50 ? '#293a99' : '#C8962A';
+  return `<div class="metric-bar"><div class="metric-fill" style="width:${pct}%;background:${color}"></div></div>`;
+}
+
+function filterSchools(district) {
+  if (!district || district === 'ALL') return SCHOOL_DATA;
+  return SCHOOL_DATA.filter(s => s.district === district.toUpperCase());
+}
+
+function buildSystemPrompt() {
+  const districtFilter = activeDistrict === 'ALL' ? 'all districts' : activeDistrict;
+  return `You are HEC Data Analyst, an expert assistant for the Heartland Educational Consortium in Florida. You have deep expertise in Florida school accountability data and help principals, coaches, and district leaders understand their school performance data.
+
+ACTIVE FILTER: ${districtFilter}
+
+DISTRICT DATA (2025):
+${JSON.stringify(DISTRICT_DATA)}
+
+SCHOOL DATA (2025):
+${JSON.stringify(SCHOOL_DATA.filter(s => activeDistrict === 'ALL' || s.district === activeDistrict))}
+
+DATA DEFINITIONS:
+- grade2025/2024/2023/2022: Florida school letter grades (A-F)
+- pctPoints: Percent of total possible points earned (overall performance)
+- elaAch: ELA Achievement score (% of points earned in component)
+- mathAch: Math Achievement score
+- sciAch: Science Achievement score
+- gradRate: Graduation rate (%)
+- econDis: % Economically Disadvantaged students
+- elaGains/mathGains: Learning Gains (% making at least 1 year progress)
+- elaLow25/mathLow25: Learning gains for lowest 25% of students
+
+RESPONSE FORMAT: Use HTML tables and structured data when comparing multiple schools/districts. Use clear headings. Be specific with numbers. For single schools, provide a comprehensive snapshot. Highlight notable trends (improvement, decline, strengths, weaknesses). Be encouraging about progress while being honest about challenges.
+
+When asked to compare or rank, always show the data. When asked about a specific school, look it up precisely. Mention the district context. Point out the highest and lowest performers when relevant. Always provide actionable observations.
+
+HEC COLORS: Blue #293a99, Green #91c94d — you are a proud representative of the Heartland Educational Consortium.
+
+Keep responses focused and clear. Use HTML: <table class="data-table">, <div class="stat-row">, <div class="callout">, <div class="section-head">, grade pill spans like <span class="grade-pill grade-A">A</span>. DO NOT use markdown. Use HTML only.`;
+}
+
+let isLoading = false;
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+}
+
+function addMessage(role, html) {
+  const container = document.getElementById('chatMessages');
+  const row = document.createElement('div');
+  row.className = `msg-row ${role}`;
+
+  const avatar = document.createElement('div');
+  avatar.className = `msg-avatar ${role === 'user' ? 'avatar-user' : 'avatar-ai'}`;
+  avatar.textContent = role === 'user' ? '👤' : 'H';
+
+  const bubble = document.createElement('div');
+  bubble.className = `msg-bubble ${role === 'user' ? 'bubble-user' : 'bubble-ai'}`;
+  bubble.innerHTML = html;
+
+  row.appendChild(avatar);
+  row.appendChild(bubble);
+  container.appendChild(row);
+  container.scrollTop = container.scrollHeight;
+  return bubble;
+}
+
+function addLoading() {
+  const container = document.getElementById('chatMessages');
+  const row = document.createElement('div');
+  row.className = 'msg-row ai';
+  row.id = 'loadingRow';
+
+  const avatar = document.createElement('div');
+  avatar.className = 'msg-avatar avatar-ai';
+  avatar.textContent = 'H';
+
+  const bubble = document.createElement('div');
+  bubble.className = 'msg-bubble bubble-ai';
+  bubble.innerHTML = '<div class="loading-dots"><span></span><span></span><span></span></div>';
+
+  row.appendChild(avatar);
+  row.appendChild(bubble);
+  container.appendChild(row);
+  container.scrollTop = container.scrollHeight;
+}
+
+function removeLoading() {
+  const el = document.getElementById('loadingRow');
+  if (el) el.remove();
+}
+
+async function sendMessage() {
+  if (isLoading) return;
+  const input = document.getElementById('userInput');
+  const text = input.value.trim();
+  if (!text) return;
+
+  isLoading = true;
+  input.value = '';
+  input.style.height = 'auto';
+  document.getElementById('sendBtn').style.opacity = '0.5';
+
+  addMessage('user', `<p>${text.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</p>`);
+  addLoading();
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1500,
+        system: buildSystemPrompt(),
+        messages: [{ role: 'user', content: text }]
+      })
+    });
+
+    const data = await res.json();
+    removeLoading();
+
+    if (data.content && data.content[0]) {
+      const html = data.content[0].text || '<p>No response received.</p>';
+      addMessage('ai', html);
+    } else {
+      addMessage('ai', '<div class="error-msg">Something went wrong. Please try again.</div>');
+    }
+  } catch (err) {
+    removeLoading();
+    addMessage('ai', `<div class="error-msg">Connection error: ${err.message}</div>`);
+  }
+
+  isLoading = false;
+  document.getElementById('sendBtn').style.opacity = '1';
+}
+
+buildChips();
+
+setTimeout(() => {
+  addMessage('ai', `<p>Hello! I'm your HEC Data Analyst, ready to explore performance data across all 6 Heartland districts and 56 schools.</p>
+<div class="stat-row">
+  <div class="stat-card"><span class="stat-val">1</span><span class="stat-lbl">A District</span></div>
+  <div class="stat-card"><span class="stat-val">4</span><span class="stat-lbl">B Districts</span></div>
+  <div class="stat-card"><span class="stat-val">2</span><span class="stat-lbl">C Districts</span></div>
+</div>
+<div class="callout">✨ Glades earned an <strong>A</strong> in 2025 — the only district-level A in the consortium. Ask me what's driving that success!</div>
+<p>Click a district in the sidebar to focus my analysis, or ask me anything below.</p>`);
+}, 400);
+</script>
+</body>
+</html>
