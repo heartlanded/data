@@ -845,7 +845,7 @@ async function sendMessage() {
         'anthropic-dangerous-direct-browser-access': 'true'
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-sonnet-4-5',
         max_tokens: 1500,
         system: buildSystemPrompt(),
         messages: [{ role: 'user', content: text }]
@@ -859,7 +859,8 @@ async function sendMessage() {
       const html = data.content[0].text || '<p>No response received.</p>';
       addMessage('ai', html);
     } else {
-      addMessage('ai', '<div class="error-msg">Something went wrong. Please try again.</div>');
+      const errDetail = data.error ? data.error.message : JSON.stringify(data);
+      addMessage('ai', `<div class="error-msg">API error: ${errDetail}</div>`);
     }
   } catch (err) {
     removeLoading();
